@@ -1,0 +1,47 @@
+这题跟之前DFS做的subset的题的做法差不多
+只是在判断可以重复应用数组里的数字时的代码有所不同
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result=new ArrayList<>();
+        if(candidates.length==0)
+        {
+            return result;
+        }
+        Arrays.sort(candidates);
+        recursionDFS(candidates,target,0,new ArrayList<>(),result);
+        return result;
+    }
+    public void recursionDFS(   int[] candidates, 
+                                int remainTarget, 
+                                    int startIdx, 
+                        ArrayList<Integer> subset, 
+                        List<List<Integer>> result)
+    {
+    //////////////
+    
+    //if(result.contains(subset))
+    //    {
+     //       return;
+     //   }
+   //     这段代码为了去重，每次查询整个arraylist都要执行O(n)时间，会让时间复杂度不能接受
+    /////////////////
+        if(remainTarget==0)
+        {
+            result.add(new ArrayList<>(subset));
+        }
+        for(int i=startIdx;i<candidates.length;i++)
+        {
+        //这段要用nextremainTarget的值来限制递归的次数，如果所剩的target值已经小于当前角标下的值，则跳出循环
+            if(nextremainTarget<candidates[i])
+            {
+              break;
+            }
+            subset.add(candidates[i]);
+            int nextremainTarget=remainTarget-candidates[i];
+            recursionDFS(candidates,nextremainTarget,i,subset,result);//这段是与subset的题不同的地方，递归的起始标仍为i，这个区别就在
+            是否在一个for loop内，可以有连续的同一位置的candidates的值被累加，若是i+1，则在loop中i每++时，则递归的下一次要从下一个角标开始，不能
+            重复搜索同一个值
+            subset.remove(subset.size()-1);
+        }
+    }
+}
