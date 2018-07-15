@@ -1,0 +1,32 @@
+class Solution {
+    public int numJewelsInStones(String J, String S) {
+        // Map<Character,Integer> map = new HashMap<>(); char的构造函数是Character
+        // int count = 0;
+        // for(int i = 0; i < J.length(); i++)
+        // {
+        //     map.put(J.charAt(i), 0);
+        // }
+        // for(int j =0; j < S.length(); j++)
+        // {
+        //     if(map.containsKey(S.charAt(j)))
+        //         count++;
+        // }
+        // return count;
+        //第二种用构造器遍历
+        // int count = 0;
+        // Map<Character, Integer> map = new HashMap<>();
+        // for(Character jewel : J.toCharArray())
+        // {
+        //     map.put(jewel, 0);
+        // }
+        // for(Character stone : S.toCharArray())
+        // {
+        //     if(map.containsKey(stone))
+        //         count++;
+        // }
+        // return count;
+        
+        // 第三种直接用string的内部方法
+        return S.replaceAll("[^" + J +"]", "").length();
+    }
+}
