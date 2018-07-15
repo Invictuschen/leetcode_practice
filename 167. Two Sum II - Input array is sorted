@@ -1,0 +1,46 @@
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        int result[]=new int[2];
+        // Map<Integer,Integer>map=new HashMap<Integer,Integer>();
+        // for(int i=0;i<numbers.length;i++)
+        // {
+        //     if(map.containsKey(target-numbers[i]))
+        //     {
+        //         if(target-numbers[i]>numbers[i])
+        //         {
+        //             result[0]=i+1;
+        //             result[1]=map.get(target-numbers[i])+1;
+        //         }
+        //         else
+        //         {
+        //             result[1]=i+1;
+        //             result[0]=map.get(target-numbers[i])+1;
+        //         }
+        //     }
+        //     map.put(numbers[i],i);
+        // }
+        // return result;
+        // 这种方法太笨了，已经给了升序数组了，不应该再hashmap了
+        // int left=0,right=numbers.length-1;
+        // while(numbers[left]+numbers[right]!=target)
+        // {
+        //     if(numbers[left]+numbers[right]>target)right--;
+        //     else left++;
+        // }
+        // // 数组创建时直接加参的写法：
+        // return new int[]{left+1,right+1};
+        // 再试试binary search:
+        int left=0,right=numbers.length-1;
+        while(numbers[right/2]>target)
+        {
+            right=right/2;
+        }
+        while(numbers[left]+numbers[right]!=target)
+        {
+            if(numbers[left]+numbers[right]<target)left++;
+            else right--;
+        }
+        return new int[]{left+1,right+1};
+       
+    }
+}
