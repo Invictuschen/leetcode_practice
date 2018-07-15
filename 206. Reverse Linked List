@@ -1,0 +1,30 @@
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        // // 两种方法 先非递归
+        // if(head == null)
+        //     return null;
+        // ListNode tail = new ListNode(head.val);
+        // tail.next = null;
+        //    while(head.next != null)
+        //    {
+        //        head = head.next;
+        //        ListNode front = new ListNode(head.val);
+        //        front.next = tail;
+        //        tail = front; 
+        //    }
+        //     return tail;
+        // 再来递归
+       return reverseList(head, null);
+        
+    }
+    public ListNode reverseList(ListNode head , ListNode tail) {
+        if(head == null)
+        {
+            return tail;
+        }
+        ListNode next = head.next;
+        head.next = tail;
+        tail = head;
+        return reverseList(next, tail);
+    }
+}
