@@ -1,0 +1,43 @@
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists == null || lists.length == 0)
+            return null;
+        ListNode result = null;
+        Queue<ListNode> queue = new LinkedList<>();//用一个queue把结果装起来，然后每次弹出两个linkedlist来做merge 如果queue空了 那么就是直接返回最后结果， 如果queue不空，说明还要至少在进行一次
+        for(int i=0; i<lists.length; i++)
+        {
+            queue.add(lists[i]);
+        }
+        while(!queue.isEmpty())
+        {
+            ListNode l1 = queue.poll();
+            ListNode l2 = queue.poll();
+            if(!queue.isEmpty())
+            {
+                result = helper(l1,l2);
+                queue.add(result);
+            }
+            else
+            {
+                return helper(l1, l2);
+            }
+        }
+        return result;
+    }
+    public ListNode helper(ListNode l1, ListNode l2)
+    {
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        if(l1.val < l2.val)
+        {
+            l1.next = helper(l1.next, l2);
+            return l1;
+        }
+        else
+        {
+            l2.next = helper(l1, l2.next);
+            return l2;
+        }
+            
+    }
+}
