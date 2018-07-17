@@ -1,0 +1,35 @@
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        Map<Character, Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        List<Integer> partition = new ArrayList<>();
+        for(Character ch : S.toCharArray())
+        {
+            list.add(S.lastIndexOf(ch));
+        }
+        int larrow,rarrow;
+        for(int i = 0; i < left.size(); i++)
+        {
+            larrow = left.get(i);
+            rarrow = right.get(i);
+            for(int j = i + 1; j < left.size(); j++)
+            {
+                if(rarrow > left.get(j)) 
+                {
+                    rarrow = Math.max(rarrow, right.get(j));
+                }
+                else{  //这么写else为什么最后几位会断掉？ 变成独立分割了呢？
+                    i = j - 1;
+                     partition.add(rarrow - larrow + 1);
+                    break; 
+                }
+            }
+           
+        }
+        // partition.add(S.indexOf('l')-S.lastIndexOf('l'));
+        return partition;
+        
+        
+    }
+}
+更新的写法:
