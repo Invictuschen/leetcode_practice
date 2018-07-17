@@ -1,0 +1,112 @@
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if(p.length() == 0 || p == null)
+        {
+            return result;
+        }
+        Map<Character, Integer> mapP = new HashMap<>();
+        
+        for(Character ch : p.toCharArray())
+        {
+            if(mapP.containsKey(ch))
+            {
+                mapP.put(ch, mapP.get(ch) + 1);
+            }
+            else mapP.put(ch, 1);
+        }
+        // 怎么避免双重循环？ 这个时间复杂度是n^2
+        Map<Character, Integer> mapS = new HashMap<>();
+        for(int i = 0; i < s.length() - p.length() + 1; i++)
+        {
+            String sub = s.substring(i, i + p.length());
+            for(Character ch : sub.toCharArray())
+            {
+                if(mapS.containsKey(ch))
+            {
+                mapS.put(ch, mapS.get(ch) + 1);
+            }
+            else mapS.put(ch, 1);
+            }
+            if(mapS.equals(mapP))
+            {
+                result.add(i);
+            }
+            mapS = new HashMap<>();
+        }
+        return result;
+    }
+}
+用set的想法是不对的，用set的话，aab和bba都会是[a,b] 但两者并不是anagram,所以不应该用set来判断，而应该用hashmap
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        // int arrS[] = new int[26];
+        // int arrP[] = new int[26];
+        // List<Integer> result = new ArrayList<>();
+        // for(int i = 0; i < p.length(); i++)
+        // {
+        //     arrP[p.charAt(i) - 'a']++;
+        // }
+        // // int l = arrP.length; 不是arrp的length, 而是p的length
+        // int l = p.length();
+        // for(int j = 0; j < s.length(); j++)
+        // {
+        //     if(j >= l) 
+        //     {
+        //         arrS[s.charAt(j - l) - 'a']--;
+        //     }
+        //     arrS[s.charAt(j) - 'a']++;
+        //     // if(arrP.equals(arrS))//这句致命了，java中判断数组是否相同要用arrays.equals
+        //     if(Arrays.equals(arrP,arrS))
+        //     {
+        //         result.add(j - l + 1);
+        //     }
+        // }
+        // return result;
+   
+        
+    }
+}
+     // 试一试用hashtable写:
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if(p.length() == 0 || p == null)
+        {
+            return result;
+        }
+        Map<Character, Integer> mapP = new HashMap<>();
+        
+        for(Character ch : p.toCharArray())
+        {
+            mapP.put(ch, mapP.getOrDefault(ch, 0) + 1);
+        }
+           // int len = mapP.size();这个地方用mapP的长度是不对的，因为map可能由于字母相同而缩短，所以应该用p的长度
+        int len = p.length();
+        
+        Map<Character, Integer> mapS = new HashMap<>();
+        for(int i = 0; i < s.length(); i++)
+        {
+        //用
+            if(i >= len)这边用了一个定长的窗口来对map进行增删，这样就不用遍历sub来判断map了
+            {
+                mapS.put(s.charAt(i - len), mapS.get(s.charAt(i - len)) - 1);
+                //这边要注意，当一个key的value为0时，要将其从map中剔除，否则会影响map的判断
+                if(mapS.get(s.charAt(i - len)) == 0)
+                {
+                    mapS.remove(s.charAt(i - len));
+                }
+            }
+            mapS.put(s.charAt(i), mapS.getOrDefault(s.charAt(i), 0) + 1);
+            if(mapS.equals(mapP))
+            {
+                result.add(i - len + 1);
+            }
+        }
+        return result;
+    
+            
+        }
+       
+    }
+    但是这样时间复杂度太高，到达了200多ms,推断是map.remove时候引入了太多操作，而且是双hashmap,能不能用单map和一个int的counter来判断
