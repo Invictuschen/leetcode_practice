@@ -1,0 +1,32 @@
+class Solution {
+    public int myAtoi(String str) {
+    str = str.trim();
+    if (str == null || str.length() == 0)
+		return 0;
+        // str = str.replace(" ", ""); 多了这句话为什么错呢？ 难道是说string中间的空格要被看作违规的，而string前的空格是可以接受的？
+	char firstChar = str.charAt(0);
+	int sign = 1, start = 0, len = str.length();
+	long sum = 0;
+	if (firstChar == '+') {
+		sign = 1;
+		start++;
+	} else if (firstChar == '-') {
+		sign = -1;
+		start++;
+	}
+	for (int i = start; i < len; i++) {
+		if (!Character.isDigit(str.charAt(i)))
+			return (int) sum * sign;
+		sum = sum * 10 + str.charAt(i) - '0';
+		// if (sign == 1 && sum > Integer.MAX_VALUE)
+		// 	return Integer.MAX_VALUE;
+		// if (sign == -1 && (-1) * sum < Integer.MIN_VALUE)
+		// 	return Integer.MIN_VALUE;
+        if(sum > Integer.MAX_VALUE)
+        {
+            return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+	}
+	return (int) sum * sign;
+    }
+}
