@@ -1,0 +1,29 @@
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if(head == null)
+        {
+            return null;
+        }
+        Map<RandomListNode, RandomListNode> map = new HashMap<>();
+        RandomListNode front = head;
+        while(head.next != null)//为什么这里写head.next != null 结果就会是空的呢？ 哦 因为有可能head.next 是 #,此时把head.label放入listnode中，是无法构成新的listnode的，因为listnode只有一个int值的传参构造函数
+        {
+            map.put(head, new RandomListNode(head.label));
+            head = head.next;
+        }
+        head = front;
+        for(RandomListNode ran : map.keySet()) //这么写错在哪了,没错
+        {
+            map.get(ran).next = map.get(ran.next);
+            map.get(ran).random = map.get(ran.random);
+        }
+        // while(head != null)
+        // {
+        //     // map.get(head).next = head.next; // 这么写 新的链表又连回原来的链表上了，应该要链到新的链表的node上才对，所以：
+        //     map.get(head).next = map.get(head.next);
+        //     map.get(head).random = map.get(head.random);
+        //     head = head.next;
+        // }
+        return map.get(front);
+    }
+}
