@@ -1,0 +1,31 @@
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        // Map<Character, Integer> mapS = new HashMap<>();
+        // Map<Character, Integer> mapT = new HashMap<>();
+        // for(Character ch : s.toCharArray())
+        // {
+        //     mapS.put(ch, mapS.getOrDefault(ch, 0) + 1);
+        // }
+        // for(Character ch : t.toCharArray())
+        // {
+        //     mapT.put(ch, mapT.getOrDefault(ch, 0) + 1);
+        // }
+        // return mapS.equals(mapT);
+        // int S[] = new int[26];
+        // int T[] = new int[26];
+        // for(Character ch : s.toCharArray()) //时间复杂度O(n)
+        // {
+        //     S[ch - 'a']++;
+        // }
+        // for(Character ch : t.toCharArray())
+        // {
+        //     T[ch - 'a']++;
+        // }
+        // return Arrays.equals(S, T);
+        char []S = s.toCharArray();//时间复杂度O(nlgn)
+        char []T = t.toCharArray();
+        Arrays.sort(S);
+        Arrays.sort(T);
+        return Arrays.equals(S, T);
+    }
+}
