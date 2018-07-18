@@ -1,0 +1,43 @@
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+//         List<Integer> result = new ArrayList<>();
+//         Integer res = 1;
+//         for(int i = 0; i < rowIndex; i++)
+//         {
+            
+//         }
+//         int bit;
+//         for(int j = 0; j < rowIndex + 1; j++)
+//         {
+//             bit = res % 10;
+//             res = res / 10;
+//             result.add(bit);
+//         }
+//         return result; 这种方法进位是个问题，当int值进位的时候，没法保留大于10的数字
+//         而两个list相加其实是最简单的算法，但是没想到要怎么用简单复杂度实现。
+        List<Integer> result = new ArrayList<>();
+        result.add(1);
+        for(int i = 0; i < rowIndex; i++)
+        {
+            result.add(0);
+            for(int j = i + 1; j >= 1; j--) // 这边注意，要从外往里加，而不是从里往外加
+            {
+                result.set(j, result.get(j) + result.get(j - 1));
+            }
+        }
+        return result;
+}
+}
+最狠的做法！:
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        long res = 1;
+        List<Integer> result = new ArrayList<>();
+        for(int i = 0; i <= rowIndex; i++)
+        {
+            result.add((int)res);
+            res = res * (rowIndex - i) / (i + 1);
+        }
+        return result;
+    }
+}
