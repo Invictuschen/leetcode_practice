@@ -1,0 +1,27 @@
+class Solution {
+    public int max,ll;
+    public String longestPalindrome(String s) {
+        if(s.length() < 2)
+            return s;
+        for(int k = 0; k < s.length(); k++)
+        {
+            //这是因为有可能是奇数对称 也有可能偶数对称,所以要判断两次
+            expandCenter(s, k, k);//由k点起，双指针向左右两边走，求最长parlin
+            expandCenter(s, k, k+1);
+        }
+        return s.substring(ll, ll + max);
+    }
+    public void expandCenter(String s, int i, int j)
+    {
+        while(i >= 0 && j <= s.length() -1 && s.charAt(i) == s.charAt(j)) // 取出最长对称时的序列
+        {
+            i--;
+            j++;
+        }
+        if(j - i - 1 > max)  //j - i - 1是因为此时所得最长的对称序列为(i,j) 但while过后实际i走至i-1,j走至j+1,所以求长时要j-1-(i+1)+1=j-i-1
+        {
+            max = j - i - 1;
+            ll = i + 1;
+        }
+    }
+}
