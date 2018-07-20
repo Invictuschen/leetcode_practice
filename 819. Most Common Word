@@ -1,0 +1,41 @@
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        Map<String, Integer> map = new HashMap<>();
+        if(paragraph.length() == 0 || paragraph == null)
+        {
+            return null;
+        }
+        paragraph = paragraph.concat(".");
+        StringBuilder word = new StringBuilder();
+        int max = Integer.MIN_VALUE;
+        String res = "";
+        Set<String> set = new HashSet<>();
+        for(String wrd : banned){
+            set.add(wrd);
+        }
+        for(Character ch : paragraph.toCharArray())
+        {
+            if(Character.isLetter(ch))
+            {
+                word.append(Character.toLowerCase(ch));
+            }
+            else if(word.length() > 0){
+                String str = word.toString();
+                // word = word.delete(0, word.length());
+                word = new StringBuilder();
+                if(set.contains(str)){
+                    continue;
+                }
+                else{
+                    map.put(str, map.getOrDefault(str, 0) + 1);
+                    res = map.get(str) > max ? str : res;
+                    max = map.get(res);
+                }
+            }
+        }
+        return res;
+        }
+    }
+用stringbuilder的方法要比用string自身tolowercase replaceall split加起来要快  但是也有很多易错点，比如character进行tolowercase要用
+Character构造器实现，对放入map中的单词，要进行长度大于0的判断，对stringbuilder进行清空，要用delete函数，判断character是字母，要用
+Character.isLetter判断。
