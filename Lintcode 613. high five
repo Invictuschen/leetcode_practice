@@ -1,0 +1,40 @@
+public class Solution {
+    /**
+     * @param results a list of <student_id, score>
+     * @return find the average of 5 highest scores for each person
+     * Map<Integer, Double> (student_id, average_score)
+     */
+    public Map<Integer, Double> highFive(Record[] results) {
+        // Write your code here
+        if(results == null || results.length < 5) {
+            return null;
+        }
+        Map<Integer, PriorityQueue<Integer>> map = new HashMap<>();
+        for (int i = 0; i < results.length; i++) {
+            if(map.containsKey(results[i].id)) {
+                if(map.get(results[i].id).peek() < results[i].score) {
+                    map.get(results[i].id).poll();
+                    map.get(results[i].id).add(results[i].score);
+                }
+            }
+            else {
+                PriorityQueue<Integer> pri = new PriorityQueue<>(5);
+                pri.add(results[i].score);
+                map.put(results[i].id, pri);
+            }
+        }
+        Map<Integer, Double> result = new HashMap<>();
+        for(Integer integer : map.keySet()) {
+            int sum = 0;
+            double avg = 0;
+            for (int k = 0; k < 5; k++) {
+                sum += map.get(integer).poll(); // 这里为什么空指针异常呢？☹️ 找到问题所在了，这段代码的15行开始的判断，是说当map中有
+                这个学生的id时，看首位的数据，但是当priorityqueue.size()<5的时候，要不加判断就把数据放入，由于判断错误，所以没能在map中
+                插入数据，所以会空指针异常
+            }
+            avg = (double)sum / 5;
+            result.put(integer, avg);
+        }
+        return result;
+    }
+}
