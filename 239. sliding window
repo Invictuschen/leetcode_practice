@@ -1,0 +1,78 @@
+// class Solution {
+//     public int[] maxSlidingWindow(int[] nums, int k) {
+        
+//         if(nums.length == 0 || nums == null) {
+//             return new int[]{};
+//         }
+//         int[] result = new int[nums.length - k + 1];
+//         Comparator<Integer> cmp;
+// 		    cmp = new Comparator<Integer>() {
+// 		      public int compare(Integer e1, Integer e2) {
+// 		        return e2 - e1;
+// 		      }
+// 		    };
+//         Queue<Integer> pri = new PriorityQueue<Integer>(k, cmp);
+//         for (int i = 0; i < nums.length; i++) {
+//             pri.add(nums[i]);  // priorityqueue的方法要用add和remove 则复杂都变成了nlgn，并不是线性的了 所以这道题最优解法并不是用priorityqueue
+//             if(i >= k - 1) {
+//                 int next = pri.peek();
+//                 result[i - k + 1] = next;
+//                 pri.remove(nums[i - k + 1]);
+//             }
+//         }
+//         return result;
+//     }
+// }
+/**
+我们用双向队列可以在O(N)时间内解决这题。当我们遇到新的数时，将新的数和双向队列的末尾比较，如果末尾比新数小，则把末尾扔掉，直到该队列的末尾比新数大或者队列为空的时候才住手。这样，我们可以保证队列里的元素是从头到尾降序的，由于队列里只有窗口内的数，所以他们其实就是窗口内第一大，第二大，第三大...的数。
+保持队列里只有窗口内数的方法和上个解法一样，也是每来一个新的把窗口最左边的扔掉，然后把新的加进去。然而由于我们在加新数的时候，已经把很多没用的数给扔了，这样队列头部的数并不一定是窗口最左边的数。这里的技巧是，我们队列中存的是那个数在原数组中的下标，这样我们既可以知到这个数的值，也可以知道该数是不是窗口最左边的数。这里为什么时间复杂度是O(N)呢？因为每个数只可能被操作最多两次，一次是加入队列的时候，一次是因为有别的更大数在后面，所以被扔掉，或者因为出了窗口而被扔掉。
+*/
+public class Solution {
+    // Time: O(n), Space: O(k)
+    /**
+    Linked structures are possibly the worst structure to iterate with a cache miss on each element. On     top of it they consume way more memory.
+If you need add/remove of the both ends, ArrayDeque is significantly better than a linked list. Random access each element is also O(1) for a cyclic queue.
+The only better operation of a linked list is removing the current element during iteration.
+    */
+    
+    private Deque<Integer> deque;
+    private int[] res;
+    private boolean isDebug = false;
+    
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k <= 0) {
+            return new int[0];
+        }
+        res = new int[nums.length - k + 1];
+        deque = new ArrayDeque<Integer>();
+        for (int i = 0; i < k-1; i++) {
+            inQueue(nums[i]);
+        }
+        for (int i = k-1; i < nums.length; i++) {
+            inQueue(nums[i]);
+            res[i-k+1] = getMax();
+            outQueue(nums[i-k+1]);
+        }
+        return res;
+        
+        
+    }
+    
+    private void inQueue(int num) {
+        //Time : O(k)
+        while (!deque.isEmpty() && deque.peekLast() < num) {
+            deque.pollLast();
+        }
+        deque.offerLast(num);
+    }
+    private void outQueue(int num) {
+        // Time: O(1), if duplicate number's index matters, we can store the index instead if its value
+        if (deque.peekFirst() == num) {
+            deque.pollFirst();
+        }
+        
+    }
+    private int getMax() {
+        return deque.peekFirst();
+    }
+}
