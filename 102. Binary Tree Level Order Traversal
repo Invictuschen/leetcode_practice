@@ -1,0 +1,46 @@
+class Solution {
+   
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        int size = 0;
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            
+            // if (next.left != null) {
+            //     treeset.add(next.left);
+            //     subset.add(next.left.val);
+            // }
+            // if (next.right != null) {
+            //     treeset.add(next.right);
+            //     subset.add(next.right.val);
+            // }
+            // if (queue.isEmpty()) {
+            //     result.add(subset);
+            //     for (TreeNode node : treeset) {
+            //         queue.offer(node);
+            //     }  这种写法TLE了 好好看九章的模版
+            // 找到了关键的问题，要确定一层的queue的长度，然后对当前层的queue来处理，用size来规定当前层的处理数量,也可以省掉一个存treenode的容器
+            size = queue.size();
+             List<Integer> subset = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode next = queue.poll();
+                subset.add(next.val);
+                if (next.left != null) {
+                    queue.offer(next.left);
+                }
+                if (next.right != null) {
+                    queue.offer(next.right);
+                }
+            }
+            result.add(subset); // 这个地方我记得要对subset进行一个处理，才能把subset加到result中
+            // subset.clear(); 这句不行，看来加到result中的subset是个shallowcopy，如果清空了，result中的也被清空了,所以38行不得不每次都创建个新的list
+        }
+        return result;
+        
+    }
+}
