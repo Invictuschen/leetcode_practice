@@ -1,0 +1,90 @@
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        // List<Integer> result = new ArrayList<>();
+        // if (arr.length == k) {
+        //     for (Integer inte : arr) {
+        //         result.add(inte);
+        //     }
+        //     return result;
+        // }
+        // int end = arr.length - 1;
+        // int start = 0;
+        // int target = 0;
+        // while (start + 1 < end) {
+        //     int mid = (end - start) / 2;
+        //     if (arr[mid] > x) {
+        //         end = mid;
+        //     }
+        //     else if(arr[mid] < x) {
+        //         start = mid;
+        //     }
+        //     else {
+        //         target = mid;
+        //         break;
+        //     }
+        // }
+        // if (end - start == 1) {
+        //     target = x == arr[end] ? end : start;
+        // } 
+        // if (target - k / 2 > 0) {
+        //     for (int i = target - k / 2; i < target + k / 2; i++) {
+        //         result.add(arr[i]);
+        //     }
+        // }
+        // else if (target - k / 2 <= 0) {
+        //     for (int i = 0; i < k; i++) {
+        //         result.add(arr[i]);
+        //     }
+        // }
+        // else if (target + k / 2 > arr.length - 1) {
+        //     for (int i = arr.length - k; i < arr.length; i++) {
+        //         result.add(arr[i]);
+        //     }
+        // }
+        // return result; 第一种想法正着想 太费劲了，好多边界条件 导致TLE最后
+        List<Integer> res = new ArrayList<>();
+        if (arr.length == 0 || k <=0 ) {
+            return res;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            res.add(arr[i]);
+        }
+        while(res.size() != k) {
+            if (Math.abs(res.get(0) - x) > Math.abs(res.get(res.size() - 1) - x)) {
+                res.remove(0);
+            }
+               else {
+                   res.remove(res.size() - 1);
+               }
+        }
+               return res;
+    }
+}
+第二种方法是先O(n)把数组插入list中，因为最终要k长的数组，所以判断两边哪边离x更远，就去掉哪边，由于arraylist插入删除的效率很低，所以最终得到的
+时间复杂度也很高. 若改成linkedlist，效率提高，但是复杂度还是不够简便。
+有没有更好的方法呢？
+有，用二分法来查找数组的左界。由于左界一定是从0到n-k的位置，所以可以讨论左界范围的中值与x的距离，来判断左界的范围，最终可以找到一个最小值的左界，由于
+题目要求左右如果都是第k值的话，选左边，也就是选最小的左界，所以当左边距离大于右边距离时，左边划到中值+1，而右边大于等于中值时，右边划到中值。
+
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        List<Integer> res = new ArrayList<>();
+        int left = 0, right = arr.length - k;
+        while (left < right) { // 为什么小于不对，小于等于就对呢? right = arr.length - k - 1 与left <= right是配套的
+        ，因为最终left会走到left+1的位置，满足k个值的list，而left<right 与arr.length - k 是配套的,也保证k个值成立
+            int mid = left + (right - left) / 2;
+            if (x - arr[mid] > arr[mid + k] - x) {
+                left = mid + 1;
+            }
+            else {
+                right = mid;
+            }
+        }
+        while ( k != 0)
+        {
+            res.add(arr[left++]);
+            k--;
+        }
+        return res;
+    }
+}
