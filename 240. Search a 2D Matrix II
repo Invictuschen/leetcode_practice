@@ -16,3 +16,4 @@ class Solution {
         return false;
     }
 }
+想法类似与48的search 2d matrix
