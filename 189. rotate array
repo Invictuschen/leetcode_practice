@@ -1,0 +1,51 @@
+class Solution {
+    public void rotate(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            nums = new int[0];
+            return;
+        }
+        if (k > nums.length) {
+            k = k % nums.length;
+        }
+        // deep copy a new int array to realize the rotate:
+        // int res[] = new int[nums.length];
+        // for (int l = 0; l < nums.length; l++) {
+        //     res[l] = nums[l];
+        // }
+        // for (int i = 0; i < k; i++) {
+        //     nums[i] = nums[nums.length - k + i];
+        // }
+        // for (int j = k; j < nums.length; j++) {
+        //     nums[j] = res[j - k];
+        // }
+        
+        // use deque:
+        // Deque<Integer> deque = new ArrayDeque<Integer>();
+        // for (int i = nums.length - 1; i > nums.length - k - 1; i--) {
+        //     deque.offerLast(nums[i]);
+        // }
+        // for (int j = 0; j < nums.length - k; j++) {
+        //     deque.offerFirst(nums[j]);
+        // }
+        // for (int l = 0; l < nums.length; l++) {
+        //     nums[l] = deque.pollLast();
+        // }
+        
+        // switch from right to left: failure
+        
+        // use reverse method:
+        reverse(nums, 0, nums.length -1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.length - 1);
+    }
+    public void reverse(int nums[], int i, int j) {
+        int len = nums.length;
+        while (i < j) {
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
