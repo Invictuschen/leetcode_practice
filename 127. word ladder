@@ -1,0 +1,44 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (!wordList.contains(endWord) || beginWord == endWord) {
+            return 0;
+        }
+        Stack<String> stack = new Stack<>();
+        wordList.remove(beginWord);
+        wordList.remove(endWord);
+        Set<String> dict = new HashSet(); // 这边特别要注意的一点是，如果不用set来装wordlist里面的数据，则会造成tle，因为wordlist里可能会有大量的重复数据
+        dict.addAll(wordList);
+        stack.push(beginWord);
+        int len = beginWord.length();
+        int move = 1;
+        List<String> subset = new ArrayList<>();
+        while(!stack.isEmpty()) {
+            String newWord = stack.pop();
+            for (int i = 0; i < len; i++) {
+                char[] wchar = newWord.toCharArray();
+                for (char j = 'a'; j <= 'z'; j++) {
+                    wchar[i] = j;
+                    String cWord = new String(wchar);
+                    // if (cWord == endWord) {
+                    if (cWord.equals(endWord)) { //记得这里判断两个string相等不能用双等，要用equals
+                        move++;
+                        return move;
+                    }
+                    if (dict.contains(cWord)) {
+                        subset.add(cWord);
+                        dict.remove(cWord);
+                    }
+                }
+            }
+            if (stack.isEmpty()) {
+                if (subset.isEmpty()) { // 这句也是非常必要的，当stack中的所有字符被尝试改变之后发现wordlist里面并没有单词与之匹配，说明wordlist里的词不能由stack中的词转变过来，所以要判断若没有匹配，则要无法完成wordladdering
+                return 0;
+                }
+                stack.addAll(subset);
+                move++;
+                subset = new ArrayList<>();
+            }
+        }
+        return move;
+    }
+}
