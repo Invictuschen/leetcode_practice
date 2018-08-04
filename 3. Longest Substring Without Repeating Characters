@@ -1,0 +1,32 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        Map<Character, Integer> map = new HashMap<>();
+        int max = 1, start = 0;
+        for (int end = 0; end < s.length(); end++) {
+            if (map.containsKey(s.charAt(end))) {
+                start = Math.max(map.get(s.charAt(end)) + 1, start); // 这句决定正确与否, start与map所存的之前的当前字符位置需要进行比较
+            }
+                map.put(s.charAt(end), end);
+                max = Math.max(max, end - start + 1);
+                
+        }
+        return max;
+        
+        
+       // 用自构的hashtable:
+        int word[] = new int[128];
+        Arrays.fill(word, Integer.MAX_VALUE);
+        int max = 1, start = 0;
+        for (int end = 0; end < s.length(); end++) {
+            if (word[s.charAt(end)] < end) { //不能用小于end来表示word里有之前的字母，因为0也小于end
+                start = Math.max(start, word[s.charAt(end)] + 1);
+            }
+            word[s.charAt(end)] = end;
+            max = Math.max(max, end - start + 1);
+        }
+        return max;
+    }
+}
