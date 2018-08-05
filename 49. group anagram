@@ -1,0 +1,32 @@
+首先整题要注意，用数组来做hashmap的key是不行的，即使数组内容相同，key也会被判定为不同
+那用tostring会怎么样,也不行，数组被判断时判断的是其地址值
+所以要用一个stringbuilder把数组里的东西都读出来
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> res = new ArrayList<>();
+        if (strs.length == 0 || strs == null) {
+            return res;
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            int[] word = new int[26];
+            for (char ch : str.toCharArray()) {
+                word[ch - 'a']++;
+            }
+            StringBuilder sb = new StringBuilder(); // 由于数组不能直接作为key来进行判断，所以要用一个stringbuilder把数组所有值读出来
+            for (int i = 0; i < 26; i++) {
+                sb.append(word[i]);
+            }
+            String key = sb.toString();
+            if (map.containsKey(key)) {
+               map.get(key).add(str);
+            } else {
+                List<String> list = new ArrayList<>();
+                list.add(str);
+                map.put(key, list);
+            }
+        }
+        res.addAll(map.values());
+        return res;
+    }
+}
