@@ -1,0 +1,35 @@
+
+    Map<Integer, Integer> map;
+    
+    /** Initialize your data structure here. */
+    public RandomizedSet() {
+        this.map = new HashMap<Integer, Integer>();
+    }
+    
+    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+    public boolean insert(int val) {
+        if (this.map.containsKey(val)) {
+            return false;
+        } else {
+            this.map.put(val, val);
+            return true;
+        }
+    }
+    
+    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    public boolean remove(int val) {
+        if (this.map.containsKey(val)) {
+            this.map.remove(val);
+            return true;
+        }
+        return false;
+        
+    }
+    
+    /** Get a random element from the set. */
+    public int getRandom() {
+        
+         int index = (int)(Math.random() * this.map.size()); // 这个地方必须要把后面整个部分用括号括起来，否则会出错误，因为mathrandom会直接被算成0 
+        return map.get(this.map.keySet().toArray()[index]);
+    }
+}
