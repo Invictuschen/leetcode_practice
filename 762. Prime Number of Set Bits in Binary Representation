@@ -1,0 +1,24 @@
+class Solution {
+    public int countPrimeSetBits(int L, int R) {
+        int sum = 0;
+        // int priarr[] = new int[]{2,3,5,7,11,13,17,19}; 这么比较的话每次都要遍历一遍arraylist 时间复杂度偏高
+        // List<Integer> prime = new ArrayList<>();
+        // for (Integer inte : priarr) {
+        //     prime.add(inte);
+        // }
+        for (int i = L; i <= R; i++) {
+            // String bin = Integer.toBinaryString(i); 用bitcount的方法比转成string再计算1的个数的方法要快太多了
+            int compare = Integer.bitCount(i);
+            if (isPrime(compare)) {
+                sum++;
+            }
+        }
+        return sum;
+    }
+   public boolean isPrime(int num) {
+       if (num == 2 || num == 3 || num == 5 || num == 7 || num == 11 || num == 13 || num == 17 || num == 19) {
+           return true;
+       }
+       return false;
+   } 
+}
