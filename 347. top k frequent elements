@@ -1,0 +1,23 @@
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer> res = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int inte : nums) {
+            map.put(inte, map.getOrDefault(inte, 0) + 1);
+        }
+        List<Integer> list[] = new List[nums.length + 1]; // 为什么用map.size() + 1就不行呢
+        for (int inte : map.keySet()) {
+            if (list[map.get(inte)] == null) {
+                list[map.get(inte)] = new ArrayList<>();
+            }
+            list[map.get(inte)].add(inte);
+        }
+        for (int i = list.length - 1; i > 0 && k > 0; i--) {
+            if (list[i] != null) {
+                res.addAll(list[i]);
+                k = k - list[i].size();
+            }
+        }
+        return res;
+    }
+}
