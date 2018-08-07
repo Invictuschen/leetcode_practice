@@ -52,3 +52,19 @@ public class Solution {
         return len;
     }
 }  // O(n)复杂度
+
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode a = headA;
+        ListNode b = headB;
+        while (a != b) {
+            a = a == null ? headB : a.next;
+            b = b == null ? headA : b.next;
+        }
+        return a;
+    }
+}  // a遍历到尾之后接到b头(b如是)， 由于这题里的intersection是指linkedlist在最后几位重合，所以可以用此方法判断。
