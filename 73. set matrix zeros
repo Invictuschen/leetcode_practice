@@ -1,0 +1,67 @@
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int visited[][] = new int[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix[0].length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                    if (matrix[j][i] == 0) {
+                        if (visited[j][i] == 0) {
+                            for (int k = 0; k < matrix[0].length; k++) {
+                                if (matrix[j][k] != 0) {
+                                    visited[j][k] = 1;
+                                    matrix[j][k] = 0;
+                                }
+                        }
+                        for (int l = 0; l < matrix.length; l++) {
+                            if (matrix[l][i] != 0) {
+                                visited[l][i] = 1;
+                                matrix[l][i] = 0;
+                            }
+                         
+                        }
+                        }
+                        
+                    }
+            }
+        }
+    }
+} // 一开始想出来的o(mn) space 的方法
+
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        boolean fr = false;
+        boolean fc = false;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == 0) {
+                    if (i == 0) {
+                        fr = true;
+                    }
+                    if (j == 0) {
+                        fc = true;
+                    }
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+        for (int i = 1; i < matrix.length; i++) {
+            for (int j = 1; j < matrix[0].length; j++) {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if (fr) {
+            for (int i = 0; i < matrix[0].length; i++) {
+                matrix[0][i] = 0;
+            }
+        }
+         if (fc) {
+            for (int i = 0; i < matrix.length; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+O(1)space的方法，具体是首先o(n^2)遍历一遍，将为0值的element的信息存在列首和排首，然后再从第二排第二列开始遍历，当元素的列首或者排首为0时，将此元素
+置0,从而达到根据列首和排首来改变当前列和排的数值。 之后由于第一列和第一排为特殊，当原始matrix里有首列或者首排为0的元素，要将首列或者首排置0.
