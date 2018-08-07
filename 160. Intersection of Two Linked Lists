@@ -1,0 +1,54 @@
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode newHeadA = headA;
+        ListNode newHeadB = headB;
+        Set<Integer> set = new HashSet<>();
+        while (newHeadA != null) {
+            set.add(newHeadA.val);
+            newHeadA = newHeadA.next;
+        }
+        while (newHeadB != null) {
+            if (set.contains(newHeadB.val)) {
+                return newHeadB;
+            }
+            newHeadB = newHeadB.next;
+        }
+        return null;
+    }
+}  // O(m + n)的复杂度
+
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        int len1 = len(headA);
+        int len2 = len(headB);
+        ListNode a = headA;
+        ListNode b = headB;
+        while (len1 != len2) {
+            if (len1 > len2) {
+                len1--;
+                a = a.next;
+            }
+            if (len2 > len1) {
+                len2--;
+                b = b.next;
+            }
+        }
+        while (a != null) {
+            if (a.val == b.val) {
+                return a;
+            }
+            a = a.next;
+            b = b.next;
+        }
+        return null;
+    }
+    public int len (ListNode head) {
+        int len = 0;
+        while (head != null) {
+            head = head.next;
+            len++;
+        }
+        return len;
+    }
+}  // O(n)复杂度
