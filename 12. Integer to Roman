@@ -1,0 +1,16 @@
+class Solution {
+    public String intToRoman(int num) {
+        String[] word = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        int[] digit = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < word.length; i++) {
+            while (num >= digit[i]) {
+                str.append(word[i]);
+                num -= digit[i];
+            }
+        }
+        return str.toString();
+    }
+}
+
+简单想法，用两组数组来实现太多的if else， 更直观，代码简洁
