@@ -1,0 +1,25 @@
+public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        helper(root, 0, map);
+        List<Integer> res = new ArrayList<>(map.keySet());
+        Collections.sort(res);
+        for (int inte : res) {
+            result.add(map.get(inte));
+        }
+        return result;
+    }
+    private void helper(TreeNode root, int key, Map<Integer, List<Integer>> map) {
+        if (root == null) {
+            return;
+        }
+        if (map.containsKey(key)) {
+            map.get(key).add(root.val);
+        } else {
+            List<Integer> sub = new ArrayList<>();
+            sub.add(root.val);
+            map.put(key, sub);
+        }
+        helper(root.left, key - 1, map);
+        helper(root.right, key + 1, map);
+    } // 这样写的递归，是从高到低，会先遍历到最左侧的子树，是一个dfs的遍历，而题目要求一个bfs的遍历
