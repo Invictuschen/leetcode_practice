@@ -1,0 +1,53 @@
+class Solution {
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> res = new ArrayList<>();
+        if (intervals == null || intervals.size() == 0) {
+            return res;
+        }
+        Collections.sort(intervals, new Comparator<Interval>() {  // *comparator 的用法要记住
+            public int compare(Interval a, Interval b) {
+                return a.start - b.start;
+            }
+        });
+        int start = intervals.get(0).start, end = intervals.get(0).end;
+        for (Interval inte : intervals) {
+            if (inte.start > end) {
+                res.add(new Interval(start, end));
+                start = inte.start;
+                end = inte.end;
+            } else {
+                start = Math.min(start, inte.start);
+                end = Math.max(end, inte.end);
+            }
+        }
+        res.add(new Interval(start, end));
+        return res;
+        
+    }
+}  
+再换一种用双数组来做的方法:
+
+public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> res = new ArrayList<>();
+        if (intervals == null || intervals.size() == 0) {
+            return res;
+        }
+        int[] start = new int[intervals.size()];
+        int[] end = new int[intervals.size()];
+        for (int i = 0; i < intervals.size(); i++) {
+            start[i] = intervals.get(i).start;
+            end[i] = intervals.get(i).end;
+        }
+        Arrays.sort(start);
+        Arrays.sort(end);
+        for (int i = 1; i < start.length; i++) {
+            if (start[i] > end[i - 1]) {
+                res.add(new Interval(start[i - 1], end[i - 1]));
+            } else {
+                start[i] = Math.min(start[i], start[i - 1]);
+                end[i] = Math.max(end[i], end[i - 1]);
+            }
+        }
+        res.add(new Interval(start[start.length - 1], end[end.length - 1]));
+        return res;
+    }
