@@ -1,4 +1,4 @@
-class Solution {
+1. class Solution {
     public boolean isPowerOfTwo(int n) {
         if (n <= 0) {
             return false;
@@ -15,7 +15,7 @@ class Solution {
         return isPowerOfTwo(n / 2);
     }
 }
-// 另一种想法，用bit位:
+2. // 另一种想法，用bit位:
 class Solution {
     public boolean isPowerOfTwo(int n) {
         String str = Long.toBinaryString((long)n);
@@ -23,3 +23,12 @@ class Solution {
         return str.length() == 1;
     }
 }
+
+3. class Solution {
+    public boolean isPowerOfTwo(int n) {
+        int count = Long.bitCount((long)n); // 用bitcount函数更简单,而不用tobinarystring
+        return count == 1;
+    }
+}
+4. 或者用与& 运算来解，因为2的乘方减1和2的乘方做与运算 结果一定为0
+所以一句就可以解决: return n > 0 && ((n & (n-1)) == 0);
