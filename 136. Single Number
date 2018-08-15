@@ -1,0 +1,9 @@
+从头异或到尾，会留下那个独立的数，其他相同的数都异或为0
+    public int singleNumber(int[] nums) {
+        int sum = 0;
+        for (int inte : nums) {
+            sum ^= inte;
+        }
+        return sum;
+    }
+
