@@ -1,0 +1,25 @@
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        if (n ==1) {
+            return true;
+        }
+        // if (n / 2 * 2 != n) {
+        //     return false;
+        // }
+        if (n % 2 != 0) {  // 当数不能被2整除时就弹出 说明不是2的乘方
+            return false;
+        }
+        return isPowerOfTwo(n / 2);
+    }
+}
+// 另一种想法，用bit位:
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        String str = Long.toBinaryString((long)n);
+        str = str.replace("0", "");
+        return str.length() == 1;
+    }
+}
