@@ -1,0 +1,67 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        if (n == 0) {
+            return res;
+        }
+        helper(n * 2, new StringBuilder(), new Stack<String>(), res);
+        return res;
+    }
+    public  void helper(int n,StringBuilder sb, Stack <String> stack, List<String> result) {
+        if (sb.length() == n) {
+            if (stack.isEmpty()) {
+                result.add(sb.toString());
+            }
+            return;
+        }
+        if (stack.isEmpty()) {
+            sb.append("(");
+            stack.push(")");
+            helper(n, sb, stack, result);
+            sb.setLength(sb.length() - 1);
+            stack.pop();
+        } else {
+            if (stack.peek() == "(") {
+                return;
+            } else {
+                if (stack.size() > n / 2) {
+                    return;
+                } else {
+            sb.append("(");
+            stack.push(")");
+            helper(n, sb, stack, result);
+            sb.setLength(sb.length() - 1);
+            stack.pop();
+            sb.append(")");
+            String last = stack.pop();
+            helper(n, sb, stack, result);
+            sb.setLength(sb.length() - 1);
+            stack.push(last);
+                }
+            }
+        }
+    }
+}   // 看来是比较笨拙的解法，时间复杂度偏高
+ 智商高一点的解法:
+ class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        if (n == 0) {
+            return res;
+        }
+        helper(new String(), 0, 0, n, res);
+        return res;
+    }
+    public void helper(String cur, int open, int close, int max, List<String> result) {
+        if (cur.length() == max * 2) {
+            result.add(cur);
+            return;
+        }
+        if (open < max) {
+            helper(cur + "(", open + 1, close, max, result);
+        }
+        if (open > close) {
+            helper(cur + ")", open, close + 1, max, result);
+        }
+    }
+}
