@@ -1,0 +1,62 @@
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        boolean finish = false;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    finish = finish || helper(board, new boolean[board.length][board[0].length], i, j, 0, word);
+                }
+            }
+        }
+        return finish;
+    }
+    public boolean helper(char[][] board, boolean visited[][], int x, int y, int offset, String word) {
+        if (offset == word.length()) {
+            return true;
+        }
+        if (x < 0 || x > board.length - 1 || y < 0 || y > board[0].length - 1) {
+            return false;
+        }
+        if (visited[x][y] == false && word.charAt(offset) == board[x][y]) {
+            visited[x][y] = true;
+            
+            return  helper(board, visited, x - 1, y, offset + 1, word) ||
+                    helper(board, visited, x + 1, y, offset + 1, word) ||
+                    helper(board, visited, x, y + 1, offset + 1, word) ||
+                    helper(board, visited, x, y - 1, offset + 1, word);
+        }
+        return false;
+    }
+} // 这么写出错的原因是不是因为visited被复用了？并没有分出四个独立的visited给各个
+
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        boolean finish = false;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    finish = finish || helper(board, new boolean[board.length][board[0].length], i, j, 0, word);
+                }
+            }
+        }
+        return finish;
+    }
+    public boolean helper(char[][] board, boolean visited[][], int x, int y, int offset, String word) {
+        if (offset == word.length()) {
+            return true;
+        }
+        if (x < 0 || x > board.length - 1 || y < 0 || y > board[0].length - 1) {
+            return false;
+        }
+        if (visited[x][y] == false && word.charAt(offset) == board[x][y]) {
+            visited[x][y] = true;         
+            boolean res = helper(board, visited, x - 1, y, offset + 1, word) ||
+                    helper(board, visited, x + 1, y, offset + 1, word) ||
+                    helper(board, visited, x, y + 1, offset + 1, word) ||
+                    helper(board, visited, x, y - 1, offset + 1, word);
+            visited[x][y] = false; // 这句话很关键，在遍历过后，要把原visited的值还原为未经过，
+            return res;
+        }
+        return false;
+    }
+}
