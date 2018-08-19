@@ -1,0 +1,36 @@
+class Solution {
+    public String getPermutation(int n, int k) {
+        boolean visited[] = new boolean[n];
+        int nums[] = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = i + 1;
+        }
+        int count = facSum(n - 1);
+        int start = (k - 1) / count;
+        visited[start] = true;
+       List<String> res = new ArrayList<>();
+        helper(nums, visited, nums[start] + "", res);
+        return(res.get((k - 1) % count));
+    }
+    public int facSum(int n) {
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+        return facSum(n - 1) * n;
+    }
+    private void helper(int[] nums, boolean[] visited, String res, List<String> result) {
+        if (res.length() == nums.length) {
+           result.add(res);
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                res += nums[i];
+                helper(nums, visited, res, result);
+                visited[i] = false;
+                res = res.substring(0, res.length() - 1);
+            }
+        }
+    } 
+} ／／ 264ms, 难道你就是传说中的 低能儿？！ 试试不要遍历一个list降低复杂度
