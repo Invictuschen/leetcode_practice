@@ -1,0 +1,76 @@
+class LRUCache {
+    class Node{
+        int key;
+        int val;
+        Node pre;
+        Node next;
+        Node(int k, int v) {
+            key = k;
+            val = v;
+            pre = null;
+            next = null;
+        }
+    }
+    int maxVol = 0, curVol = 0;
+    Node head, tail;
+    Map<Integer, Node> map = new HashMap<>();
+    public LRUCache(int capacity) {
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
+        head.next = tail;
+        tail.pre = head;
+        maxVol = capacity;
+    }
+    
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+        Node cur = map.get(key);
+        // 若要实现遍历linkedlist来查找node是否存在，那就要使link上的值与map一致，这样便不需遍历map，get只会改变linkedlist中node的顺序，而不会删除掉node，因为map中的元素与整条link的元素是保持一致的
+        moveToHead(cur);
+        return cur.val;
+    }
+    
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            // Node cur = new Node(key, value);
+            // moveToHead(cur); // 如果这么写，那么delete时候这个cur根本找不到，因为cur的value已经是新值了，链上不存在这个元素
+            map.put(key, cur);
+        } else {
+            Node cur = new Node(key, value);
+            pushToHead(cur);
+            map.put(key, cur);
+            curVol++;
+            if (curVol > maxVol) {
+                map.remove(tail.pre.key);
+                deleteNode(tail.pre);
+                curVol--;
+            }
+        }
+    }
+
+    public void moveToHead(Node node) { // 移动到链首，则要先删除掉在原先链中的元素，再加到链首
+        deleteNode(node);
+        pushToHead(node);
+    }
+    
+    public void pushToHead(Node node) {
+        node.next = head.next;
+        head.next.pre = node;
+        head.next = node;
+        node.pre = head;
+    }
+    
+    public void deleteNode(Node node) {
+        node.next.pre = node.pre;
+        node.pre.next = node.next;
+        node.next = null;
+        node.pre = null;
+    }
+    
+    
+    
+    
+    
+}
