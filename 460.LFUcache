@@ -1,0 +1,99 @@
+class LFUCache {
+    class Node {
+        Node pre;
+        Node next;
+        int freq;
+        int key;
+        int val;
+        public Node(int k, int v) {
+            this.key = k;
+            this.val = v;
+            this.freq = 1;
+            pre = null;
+            next = null;
+        }
+    }
+    class dlList {
+        Node head;
+        Node tail;
+        int size;
+        public dlList() {
+            this.head = new Node(0, 0);
+            this.tail = new Node(0, 0);
+            head.next = tail;
+            tail.pre = head;
+            this.size = 0;
+        }
+        public void pushLast(Node node) {
+            tail.pre.next = node;
+            node.pre = tail.pre;
+            node.next = tail;
+            tail.pre = node;
+            this.size++; // 这个list里面的数据只跟list有关，不要与nodemap的数据量进行瓜葛
+        }
+        public Node remove(Node node) {
+            node.next.pre = node.pre;
+            node.pre.next = node.next;
+            node.pre = null;
+            node.next = null;
+            this.size--;
+            return node;
+        }
+        public Node removeFirst() {
+            Node firstNode = head.next;
+            remove(firstNode);
+            return firstNode;
+        }
+    }
+    int curVol = 0, maxVol = 0, minFreq = 0;
+    Map<Integer, Node> nodeMap;
+    Map<Integer, dlList> freqMap;
+    public LFUCache(int capacity) {
+        maxVol = capacity;
+        nodeMap = new HashMap<>();
+        freqMap = new HashMap<>();
+    }
+    
+    public int get(int key) {
+        Node node = nodeMap.get(key);
+        if (node == null) {
+            return -1;
+        }
+        updatedll(node);
+        return node.val;
+    }
+    
+    public void put(int key, int value) {
+        if (maxVol == 0) {
+            return;
+        }
+        Node node = nodeMap.get(key);
+        if (node != null) {
+            node.val = value;
+            updatedll(node);
+        } else {
+            node = new Node(key, value);
+            nodeMap.put(key, node);
+            curVol++;
+            if (curVol > maxVol) {
+                Node removeNode = freqMap.get(minFreq).removeFirst();
+                nodeMap.remove(removeNode.key); // 这个remove的地方好容易错， 是removekey 不是remove一个node
+            }
+            minFreq = 1;
+            dlList newList = freqMap.getOrDefault(1, new dlList());
+            newList.pushLast(node);
+            freqMap.put(1, newList);
+        }
+    }
+    public void updatedll(Node node) {
+        dlList oldList = freqMap.get(node.freq);
+        oldList.remove(node);
+        if (oldList.size == 0 && node.freq == minFreq) {
+            minFreq++;
+        }
+        node.freq++;
+        dlList newList = freqMap.getOrDefault(node.freq, new dlList());
+        newList.pushLast(node);
+        freqMap.put(node.freq, newList);
+    }
+}
