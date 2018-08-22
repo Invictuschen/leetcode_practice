@@ -1,0 +1,68 @@
+class LRUCache {
+    class Node{
+        Node pre;
+        Node next;
+        int key;
+        int val;
+        public Node(int k, int v) {
+            this.key = k;
+            this.val = v;
+            pre = null;
+            next = null;
+        }
+    }
+    Node head, tail;
+    int curVol = 0, maxVol = 0;
+    Map<Integer, Node> store = new HashMap<>();
+    public LRUCache(int capacity) {
+        maxVol = capacity;
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
+        head.next = tail;
+        tail.next = head;
+    }
+    
+    public int get(int key) {
+        Node newnode = store.get(key);
+        if (newnode == null) {
+            return -1;
+        }
+        moveToHead(newnode);
+        return newnode.val;
+    }
+    
+    public void put(int key, int value) {
+        Node newnode = store.get(key);
+        if (newnode != null) {
+            newnode.val = value;
+            moveToHead(newnode);
+        } else {
+            newnode = new Node(key, value);
+            pushToHead(newnode);
+            curVol++;
+            store.put(key, newnode);
+            if (curVol > maxVol) {
+                Node removenode = tail.pre;
+                deleteNode(removenode);
+                store.remove(removenode.key);
+                curVol--;
+            }
+        }
+    }
+    public void deleteNode(Node node) {
+        node.next.pre = node.pre;
+        node.pre.next = node.next;
+        node.pre = null;
+        node.next = null;
+    }
+    public void pushToHead(Node node) {
+        node.next = head.next;
+        node.next.pre = node;
+        head.next = node;
+        node.pre = head;
+    }
+    public void moveToHead(Node node) {
+        deleteNode(node);
+        pushToHead(node);
+    }
+}
