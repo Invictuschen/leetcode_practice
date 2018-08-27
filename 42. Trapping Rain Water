@@ -1,0 +1,47 @@
+class Solution {
+    public int trap(int[] height) {
+         // bf: O(n^2) 
+        // int sum = 0;
+        // int leftMax, rightMax;
+        // for (int i = 1; i < height.length; i++) {
+        //     leftMax = height[i];
+        //     rightMax = height[i];
+        //     int x = i, y = i;
+        //     while (x >= 0) {
+        //         if (height[x] > leftMax) {
+        //             leftMax = height[x];
+        //         }
+        //         x--;
+        //     }
+        //     while (y <= height.length - 1) {
+        //         if (height[y] > rightMax) {
+        //             rightMax = height[y];
+        //         }
+        //         y++;
+        //     }
+        //     sum += Math.min(leftMax, rightMax) - height[i];
+        // }
+        // return sum; 
+        
+        // dp : O(n)
+        int[] leftMax = new int[height.length];
+        int[] rightMax = new int[height.length];
+        int len = height.length;
+        int sum = 0;
+        if (height.length == 0) {
+            return sum;
+        }
+        leftMax[0] = height[0];
+        rightMax[len - 1] = height[len -1];
+        for (int i = 1; i < height.length; i++) {
+            leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+            rightMax[len - i - 1] = Math.max(rightMax[len - i], height[len - i - 1]);
+        }
+        for (int j = 1; j < height.length; j++) {
+            sum += Math.min(leftMax[j], rightMax[j]) - height[j];
+        }
+        return sum;
+        dp快就快在可以把数据存在数组中，然后用o(1)时间直接取出上一部分迭代的数据，不需要再迭代n次。
+        
+    }
+}
