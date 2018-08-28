@@ -1,0 +1,49 @@
+class Solution {
+    public int[] plusOne(int[] digits) {
+        // int sum = Integer.parseInt(digits.toString());
+        // Biginteger sum = 0; // 从corner case可以看出，不能用一个数字变量来表示这个数，这个数可以非常大，所以看来是要在原数组上操作了
+        int count = 1;
+        for (int i = digits.length -1; i >= 0; i--) {
+            if (digits[i] + count >= 10) {
+                digits[i] = 0;
+                count = 1;
+            } else {
+                digits[i] = digits[i] + count;
+                count = 0;
+            }
+        }
+        if (count == 1) {
+            int[] res = new int[digits.length + 1];
+            res[0] = 1;
+            for (int i = 1; i < res.length; i++) {
+                res[i] = digits[i - 1];
+            }
+            return res;
+        }
+        return digits;
+    }
+}
+用arraylist会慢点，但应该会简单点
+class Solution {
+    public int[] plusOne(int[] digits) {
+        List<Integer> res = new ArrayList<>();
+        int count = 1;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] + count >= 10) {
+                res.add(0);
+                count = 1;
+            } else {
+                res.add(digits[i] + count);
+                count = 0;
+            }
+        }
+        if (count == 1) {
+            res.add(1);
+        }
+        int[] result = new int[res.size()];
+        for (int j = 0; j < result.length; j++) {
+            result[j] = res.get(res.size() - j - 1);
+        }
+        return result;
+    }
+}    都是0ms, 差不多。。
