@@ -1,0 +1,75 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix.length == 0 || matrix == null) {
+            return res;
+        }
+        int cs = 0, ce = matrix[0].length - 1, rs = 0, re = matrix.length - 1;
+        boolean visited[][] = new boolean[matrix.length][matrix[0].length];
+        while (cs <= ce && rs <= re) {
+        for (int i = cs; i <= ce; i++) {
+            if (!visited[rs][i]) {
+                res.add(matrix[rs][i]);
+                visited[rs][i] = true;
+            }
+            
+        }
+        for (int i = rs; i <= re; i++) {
+            if (!visited[i][ce]) {
+                visited[i][ce] = true;
+                res.add(matrix[i][ce]);
+            }
+        }
+        for (int i = ce; i >= cs; i--) {
+            if (!visited[re][i]) {
+                visited[re][i] = true;
+                res.add(matrix[re][i]);
+            }
+        }
+        for (int i = re; i >= rs; i--) {
+            if (!visited[i][cs]) {
+                visited[i][cs] = true;
+                 res.add(matrix[i][cs]);
+            }
+        }
+        cs++;
+        ce--;
+        rs++;
+        re--;
+        }
+        return res;
+    }
+} // 这是用了额外空间来限定四边的走向距离，下面试试不用额外的visited矩阵
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix.length == 0 || matrix == null) {
+            return res;
+        }
+        int cs = 0, rs = 0, ce = matrix[0].length - 1, re = matrix.length - 1;
+        while (rs <= re && cs <= ce )  {
+        for (int i = cs; i <= ce; i++) {
+            res.add(matrix[rs][i]);
+        }
+        rs++;
+        for (int i = rs; i <= re; i++) {
+            res.add(matrix[i][ce]);
+        }
+        ce--;
+            if (rs <= re) { // 在while里会有边界条件的判断，若是在上移和左移的过程中已经不满足rs<=re或是cs<=ce 则接下来的两个右移和上移则不再执行
+                 for (int i = ce; i >= cs; i-- ) {
+            res.add(matrix[re][i]);
+        }
+        re--;
+            }
+       if (cs <= ce) {
+           for (int i = re; i >= rs; i--) {
+            res.add(matrix[i][cs]);
+        }
+        cs++;
+       }
+        
+        }
+        return res;
+    }
+}
