@@ -1,0 +1,34 @@
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        Map<String, Integer> map = new HashMap<>();
+        String res ="";
+        int max = 0;
+        for (String str : strs) {
+            for (int i = 1; i <= str.length() ; i++) {
+                map.put(str.substring(0, i), map.getOrDefault(str.substring(0, i), 0) + 1);
+                if (map.get(str.substring(0, i)) == strs.length && i > max) {
+                    max = i;
+                    res = str.substring(0, i);
+                }
+            }
+        }
+        return res;
+    }
+}
+O(n^2)的复杂度，太笨了。。。
+
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) {
+            return "";
+        }
+        String prefix = strs[0];
+        for (String str : strs) {
+            while (str.indexOf(prefix) != 0) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+            }
+        }
+        return prefix;
+    }
+}
+这个最差的情况是O(n) 会快很多
