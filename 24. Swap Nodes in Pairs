@@ -1,0 +1,42 @@
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        // if (head == null || head.next == null) {
+        //     return head;
+        // }
+        // ListNode front = head.next;
+        // ListNode next = head.next.next;
+        // front.next = head;
+        // head.next = swapPairs(next);
+        // return front;
+        
+        // 非递归:
+        // ListNode dummy = new ListNode(0);
+        // dummy.next = head;
+        // ListNode pre = dummy;
+        // if (head == null || head.next == null) {
+        //     return head;
+        // }
+        // while (pre.next != null && pre.next.next != null) {
+        //     ListNode front = pre.next;
+        // ListNode then = front.next;
+        //     front.next = then.next;
+        //     then.next = front;
+        //     pre.next = then;
+        //     pre = front;
+        // }
+        // return dummy.next;
+        
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        while (head != null && head.next != null) {
+            ListNode then = head.next;
+            head.next = then.next;
+            then.next = head;
+            pre.next = then;
+            pre = head;
+            head = head.next;
+        }
+        return dummy.next;
+    }
+}
