@@ -1,0 +1,25 @@
+class Solution {
+    public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(kill);
+        List<Integer> res = new ArrayList<>();
+        if (pid == null || ppid == null) {
+            return res;
+        }
+        res.add(kill);
+        while (!queue.isEmpty()) {
+            int root = queue.poll();
+            for (int i = 0; i < ppid.size(); i++) {
+                if (ppid.get(i) == root) {
+                    queue.offer(pid.get(i));
+                    res.add(pid.get(i));
+                }
+                if (pid.get(i) == root && ppid.get(i) == 0) {
+                    return pid;
+                }
+            }
+        }
+        return res;
+    }
+} // 这么写是一个O(n^2)的复杂度，复杂度太高了
+
